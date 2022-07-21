@@ -11,17 +11,12 @@ from utils.logger_print import print_log
 
 class CoxaCheckIn:
     def __init__(self) -> None:
-        options = webdriver.ChromeOptions()
-        follow_chrome = input(print_log("Você gostaria que uma janela do Google Chrome abra para você acompanhar (S/N)? "))
-
-        if follow_chrome == "S":
-            pass
-        elif follow_chrome == "N":
-            options.add_argument("--headless")  # option to not open google chrome window
-        else:
-            raise ValueError("Opção inválida, favor tentar novamente")
-
-        self.browser = webdriver.Chrome(options=options)
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('--no-sandbox')
+        chrome_options.add_argument('--disable-dev-shm-usage')    
+        chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument("--headless")  # option to not open google chrome window
+        self.browser = webdriver.Chrome(options=chrome_options)
         print(print_log("Browser aberto!"))
 
     def lets_checkin(self) -> None:
@@ -96,5 +91,4 @@ class CoxaCheckIn:
         self.browser.quit()
         raise ValueError("Carácter inválido, por favor digite somente números")
 
-x = CoxaCheckIn()
-x.lets_checkin()
+CoxaCheckIn().lets_checkin()
