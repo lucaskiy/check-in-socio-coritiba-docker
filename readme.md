@@ -7,13 +7,14 @@ Há um potencial de escabilidade para realizar o Check-in de forma automática v
 ## Forma de uso
 
 ```
-Clone o repositório para sua máquina e cria uma imagem utilizando o Dockerfile.
+Clone o repositório para sua máquina e crie uma imagem utilizando o Dockerfile.
 
 exemplo: docker build -t coxa_checkin .
 
 *** importante ***
 
-Após a imagem ser criada é necessário dar um "run" de forma iterativa, pois é utilizado alguns comandos input do python precisam ser preenchidos.
+Após a imagem ser criada é necessário dar um "run" de forma iterativa, 
+pois é utilizado alguns comandos input do python que precisam ser preenchidos.
 
 exemplo: docker run -it coxa_checkin bash
 

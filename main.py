@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 import time
-from getpass import getpass
+import os
 from utils.logger_print import print_log
 
 
@@ -32,7 +32,7 @@ class CoxaCheckIn:
             button = self.browser.find_element(By.XPATH, '//*[@id="conteudo_hotsite"]/div/div[2]/div[1]/div/div[6]')
             self.browser.execute_script("arguments[0].click();", button)
 
-            sector_to_sit = input(print_log("Em qual setor você deseja sentar? (1 para Arquibancada, 2 para Mauá): "))
+            sector_to_sit = os.environ.get("stadium_sector")
 
             if sector_to_sit == "1":
                 self.browser.find_element(By.XPATH, '//*[@id="corpo_checkin"]/div/div/div[2]/div/div[2]').click()
@@ -57,7 +57,7 @@ class CoxaCheckIn:
 
     def login_socios_page(self) -> bool:
         cpf = self.get_user_cpf()
-        __password = getpass(print_log("Por favor insira sua senha: "))
+        __password = os.environ.get("coxa_password")
         
         # insert login credentials and enter 'sócios' account
         login_button = self.browser.find_element(By.XPATH, '//*[@id="lcpf"]')
@@ -67,21 +67,25 @@ class CoxaCheckIn:
         password_button.send_keys(__password)
         password_button.send_keys(Keys.ENTER)
         time.sleep(1)
-        self.browser.find_element(By.XPATH, '//*[@id="form_login_socio"]/button').click()
-        time.sleep(1)
 
         try:
-             # enter 'sócios' homepage
+            self.browser.find_element(By.XPATH, '//*[@id="form_login_socio"]/button').click()
+            time.sleep(1)
+            # enter 'sócios' homepage
             self.browser.find_element(By.XPATH, '//*[@id="menu_principal"]/ul/li[1]/a').click()
             time.sleep(1)
             return True
 
         except NoSuchElementException as e:
-            self.browser.quit()
-            raise NoSuchElementException("CPF OU SENHA INVÁLIDO, LOGIN FALHOU", e)
+            raise NoSuchElementException("CPF OU SENHA INVÁLIDO, LOGIN FALHOU, ", e)
+
+        finally:
+            self.browser.find_element(By.XPATH, '//*[@id="menu_principal"]/ul/li[1]/a').click()
+            time.sleep(1)
+            return True
 
     def get_user_cpf(self) -> str:
-        cpf = input(print_log("Por favor insira o seu CPF (somente números): "))
+        cpf = os.environ.get("cpf")
         if cpf.isnumeric():
             if len(cpf) == 11:
                 return str(cpf)
