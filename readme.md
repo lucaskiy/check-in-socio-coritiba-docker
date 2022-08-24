@@ -30,3 +30,8 @@ docker cp <containerId>:/file/path/within/container /host/path/target
 
 exemplo: docker cp d0c3435cd99b:/home/coxa_checkin/check-in-screenshots/ /home/lucas/Documents/proof-check-in
 ```
+
+## Bonus
+
+Adicionei uma função para notificar por email que o check-in foi realizado com sucesso.
+Porém por algum motivo essa função só funciona quando o docker é rodado em bash.

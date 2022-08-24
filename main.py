@@ -6,6 +6,11 @@ from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 import time
 import os
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.image import MIMEImage
+import smtplib
+from dotenv import load_dotenv
 from utils.logger_print import print_log
 
 
@@ -37,22 +42,26 @@ class CoxaCheckIn:
             if sector_to_sit == "1":
                 self.browser.find_element(By.XPATH, '//*[@id="corpo_checkin"]/div/div/div[2]/div/div[2]').click()
                 print(print_log("Realizado check-in na Arquibancada!"))
-                time.sleep(3)
+                time.sleep(5)
             elif sector_to_sit == "2":
                 self.browser.find_element(By.XPATH, '//*[@id="corpo_checkin"]/div/div/div[3]/div/div[2]').click()
                 print(print_log("Realizado check-in na Arquibancada!"))
-                time.sleep(3)
+                time.sleep(5)
             else:
                 self.browser.quit()
                 raise ValueError("Opção de setor inválida, favor tentar novamente")
 
-        self.browser.get_screenshot_as_png()
-        self.browser.save_screenshot(f"check-in-screenshots/check-in-proof-{datetime.strftime(datetime.now(), '%Y-%m-%d')}.png")
+        png_file_path = f"./check-in-screenshots/check-in-proof-{datetime.strftime(datetime.now(), '%Y-%m-%d')}.png"
+        self.browser.save_screenshot(png_file_path)
+        # screenshot doesn't work on docker, only when running on bash
+
         print(print_log("O seu check-in para o próximo jogo do Coxa-doido foi feito com sucesso"))
-        print(print_log("Você pode visualizar um screnshot como prova na pasta ./check-in-screenshots"))
         time.sleep(2)
         self.browser.quit()
         print(print_log("Browser fechado!"))
+
+        # print(print_log("Preparando envio de confirmação via e-mail"))
+        # self.send_email_notification(png_file_path)
 
 
     def login_socios_page(self) -> bool:
@@ -94,5 +103,31 @@ class CoxaCheckIn:
             raise ValueError("Quantidade de dígitos do CPF inválido, por favor digite 11 números")
         self.browser.quit()
         raise ValueError("Carácter inválido, por favor digite somente números")
+
+    @staticmethod
+    def send_email_notification(png_file_path: str):
+        msg = MIMEMultipart()   
+        msg["From"] = "lucask.kiy@gmail.com"
+        msg["To"] = os.environ.get("email")
+        msg["Subject"] = "Confirmação de check-in Coritiba"
+
+        load_dotenv()
+        password = os.getenv("GMAIL_PASSWORD")
+
+        message = "Olá!!!\n\nO seu check-in para o próximo jogo COXA foi feito com sucesso, segue comprovante abaixo!"
+
+        msg.attach(MIMEText(message,"plain"))
+        msg.attach(MIMEImage(open(png_file_path, "rb").read()))
+
+        try:
+            server = smtplib.SMTP('smtp.gmail.com: 587')
+            server.starttls()
+            server.login(msg['From'], password)
+            server.sendmail(msg['From'], msg['To'], msg.as_string())
+            server.quit()
+            print(f"Email de confirmação enviado com sucesso para {msg['To']}:")
+
+        except Exception as e:
+            raise e
 
 CoxaCheckIn().lets_checkin()

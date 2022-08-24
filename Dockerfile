@@ -14,11 +14,10 @@ RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
 # set display port to avoid crash
 ENV DISPLAY=:99
 
-# install selenium
-RUN pip install selenium==4.3.0
-
-
 ADD . /home/coxa_checkin/
 WORKDIR /home/coxa_checkin/
+
+# install requirements.txt
+RUN pip install -r requirements.txt 
 
 CMD ["python3", "main.py"]
