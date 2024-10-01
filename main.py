@@ -85,13 +85,9 @@ class CoxaCheckIn:
             time.sleep(1)
             return True
 
-        except NoSuchElementException as e:
-            raise NoSuchElementException("CPF OU SENHA INVÁLIDO, LOGIN FALHOU, ", e)
+        except Exception as e:
+            raise (f"CPF OU SENHA INVÁLIDO, LOGIN FALHOU, {e}")
 
-        finally:
-            self.browser.find_element(By.XPATH, '//*[@id="menu_principal"]/ul/li[1]/a').click()
-            time.sleep(1)
-            return True
 
     def get_user_cpf(self) -> str:
         cpf = os.environ.get("COXA_CPF")
