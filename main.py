@@ -37,7 +37,7 @@ class CoxaCheckIn:
             button = self.browser.find_element(By.XPATH, '//*[@id="conteudo_hotsite"]/div/div[2]/div[1]/div/div[6]')
             self.browser.execute_script("arguments[0].click();", button)
 
-            sector_to_sit = os.environ.get("stadium_sector")
+            sector_to_sit = os.environ.get("COXA_SECTOR")
 
             if sector_to_sit == "1":
                 self.browser.find_element(By.XPATH, '//*[@id="corpo_checkin"]/div/div/div[2]/div/div[2]').click()
@@ -66,7 +66,7 @@ class CoxaCheckIn:
 
     def login_socios_page(self) -> bool:
         cpf = self.get_user_cpf()
-        __password = os.environ.get("coxa_password")
+        __password = os.environ.get("COXA_PASSWORD")
         
         # insert login credentials and enter 'sócios' account
         login_button = self.browser.find_element(By.XPATH, '//*[@id="lcpf"]')
@@ -94,7 +94,7 @@ class CoxaCheckIn:
             return True
 
     def get_user_cpf(self) -> str:
-        cpf = os.environ.get("cpf")
+        cpf = os.environ.get("COXA_CPF")
         if cpf.isnumeric():
             if len(cpf) == 11:
                 return str(cpf)
@@ -108,7 +108,7 @@ class CoxaCheckIn:
     def send_email_notification(png_file_path: str):
         msg = MIMEMultipart()   
         msg["From"] = "lucask.kiy@gmail.com"
-        msg["To"] = os.environ.get("email")
+        msg["To"] = os.environ.get("COXA_EMAIL")
         msg["Subject"] = "Confirmação de check-in Coritiba"
 
         load_dotenv()
