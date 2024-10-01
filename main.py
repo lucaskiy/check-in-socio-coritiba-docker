@@ -20,7 +20,7 @@ class CoxaCheckIn:
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('--disable-dev-shm-usage')    
         chrome_options.add_argument('--disable-gpu')
-        chrome_options.add_argument("--headless")  # option to not open google chrome window
+        # chrome_options.add_argument("--headless")  # option to not open google chrome window
         self.browser = webdriver.Chrome(options=chrome_options)
         print(print_log("Browser aberto!"))
 
@@ -34,22 +34,22 @@ class CoxaCheckIn:
         if login_success:
             print(print_log("Login realizado com sucesso, seguindo para o check-in"))
             # click on make check-in option
-            button = self.browser.find_element(By.XPATH, '//*[@id="conteudo_hotsite"]/div/div[2]/div[1]/div/div[6]')
-            self.browser.execute_script("arguments[0].click();", button)
+            # button = self.browser.find_element(By.XPATH, '//*[@id="conteudo_hotsite"]/div/div[2]/div[1]/div/div[6]')
+            # self.browser.execute_script("arguments[0].click();", button)
 
-            sector_to_sit = os.environ.get("COXA_SECTOR")
+            # sector_to_sit = os.environ.get("COXA_SECTOR")
 
-            if sector_to_sit == "1":
-                self.browser.find_element(By.XPATH, '//*[@id="corpo_checkin"]/div/div/div[2]/div/div[2]').click()
-                print(print_log("Realizado check-in na Arquibancada!"))
-                time.sleep(5)
-            elif sector_to_sit == "2":
-                self.browser.find_element(By.XPATH, '//*[@id="corpo_checkin"]/div/div/div[3]/div/div[2]').click()
-                print(print_log("Realizado check-in na Arquibancada!"))
-                time.sleep(5)
-            else:
-                self.browser.quit()
-                raise ValueError("Opção de setor inválida, favor tentar novamente")
+            # if sector_to_sit == "1":
+            #     self.browser.find_element(By.XPATH, '//*[@id="corpo_checkin"]/div/div/div[2]/div/div[2]').click()
+            #     print(print_log("Realizado check-in na Arquibancada!"))
+            #     time.sleep(5)
+            # elif sector_to_sit == "2":
+            #     self.browser.find_element(By.XPATH, '//*[@id="corpo_checkin"]/div/div/div[3]/div/div[2]').click()
+            #     print(print_log("Realizado check-in na Arquibancada!"))
+            #     time.sleep(5)
+            # else:
+            #     self.browser.quit()
+            #     raise ValueError("Opção de setor inválida, favor tentar novamente")
 
         png_file_path = f"./check-in-screenshots/check-in-proof-{datetime.strftime(datetime.now(), '%Y-%m-%d')}.png"
         self.browser.save_screenshot(png_file_path)
@@ -78,7 +78,7 @@ class CoxaCheckIn:
         time.sleep(1)
 
         try:
-            self.browser.find_element(By.XPATH, '/html/body/div/main/div/div/div[2]/section/div/div[4]/div/button').click()
+            self.browser.find_element(By.XPATH, '//*[@id="form_login_socio"]/button').click()
             time.sleep(1)
             # enter 'sócios' homepage
             self.browser.find_element(By.XPATH, '//*[@id="menu_principal"]/ul/li[1]/a').click()
@@ -87,7 +87,6 @@ class CoxaCheckIn:
 
         except Exception as e:
             raise (f"CPF OU SENHA INVÁLIDO, LOGIN FALHOU, {e}")
-
 
     def get_user_cpf(self) -> str:
         cpf = os.environ.get("COXA_CPF")
