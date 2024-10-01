@@ -26,6 +26,12 @@ ENV DISPLAY=:99
 ADD . /home/coxa_checkin/
 WORKDIR /home/coxa_checkin/
 
+ARG COXA_CPF
+ARG COXA_PASSWORD
+ARG COXA_SECTOR
+ARG COXA_EMAIL_SENDER
+ARG GMAIL_PASSWORD
+
 # install requirements.txt
 RUN pip install -r requirements.txt 
 
