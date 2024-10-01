@@ -69,16 +69,16 @@ class CoxaCheckIn:
         __password = os.environ.get("COXA_PASSWORD")
         
         # insert login credentials and enter 'sócios' account
-        login_button = self.browser.find_element(By.XPATH, '//*[@id="lcpf"]')
+        login_button = self.browser.find_element(By.XPATH, '/html/body/div/main/div/div/div[2]/section/div/div[1]/input')
         login_button.send_keys(cpf)
 
-        password_button = self.browser.find_element(By.XPATH, '//*[@id="senha"]')
+        password_button = self.browser.find_element(By.XPATH, '/html/body/div/main/div/div/div[2]/section/div/div[2]/input')
         password_button.send_keys(__password)
         password_button.send_keys(Keys.ENTER)
         time.sleep(1)
 
         try:
-            self.browser.find_element(By.XPATH, '//*[@id="form_login_socio"]/button').click()
+            self.browser.find_element(By.XPATH, '/html/body/div/main/div/div/div[2]/section/div/div[4]/div/button').click()
             time.sleep(1)
             # enter 'sócios' homepage
             self.browser.find_element(By.XPATH, '//*[@id="menu_principal"]/ul/li[1]/a').click()
