@@ -21,6 +21,7 @@ class CoxaCheckIn:
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('--disable-dev-shm-usage')    
         chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument("--window-size=1920,1080")
         chrome_options.add_argument("--headless")  # option to not open google chrome window
         self.browser = webdriver.Chrome(options=chrome_options)
         print(print_log("Browser aberto!"))
@@ -111,12 +112,12 @@ class CoxaCheckIn:
         if sector_to_sit == "arquibancada":
             self.browser.find_element(By.XPATH, '/html/body/div[9]/div/div/div/div/div[2]/div[8]/div/div/div[2]/div/div/div[3]/div/div[2]').click()
             print(print_log("Realizado check-in na Arquibancada!"))
-            time.sleep(5)
+            time.sleep(1)
 
         elif sector_to_sit == "maua":
             self.browser.find_element(By.XPATH, '/html/body/div[9]/div/div/div/div/div[2]/div[8]/div/div/div[2]/div/div/div[2]/div/div[2]').click()
             print(print_log("Realizado check-in na Mauá!"))
-            time.sleep(5)
+            time.sleep(1)
 
         else:
             self.browser.quit()
