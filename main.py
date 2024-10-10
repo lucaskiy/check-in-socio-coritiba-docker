@@ -15,6 +15,7 @@ from utils.logger_print import print_log
 
 
 class CoxaCheckIn:
+
     def __init__(self) -> None:
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('--no-sandbox')
@@ -24,7 +25,11 @@ class CoxaCheckIn:
         self.browser = webdriver.Chrome(options=chrome_options)
         print(print_log("Browser aberto!"))
 
+
     def lets_checkin(self) -> None:
+        """
+            Main function that works as the class runner
+        """
         # open Coritiba website
         self.browser.get("https://sociocoxabranca.coritiba.com.br/") 
         print(print_log("Site do Coritiba aberto!"))
@@ -33,19 +38,17 @@ class CoxaCheckIn:
         login_success = self.login_socios_page()
         if login_success:
             print(print_log("Login realizado com sucesso, seguindo para o check-in"))
+
             #click on make check-in option
             button = self.browser.find_element(By.XPATH, '//*[@id="conteudo_hotsite"]/div/div[2]/div[1]/div/div[6]')
             self.browser.execute_script("arguments[0].click();", button)
-
-            sector_to_sit = os.environ.get("COXA_SECTOR")
-            checkin_type = os.environ.get("CHECKIN_TYPE")
+            time.sleep(5)
 
             self.select_stadium_sector()
             self.select_check_in_type()
 
         png_file_path = f"./check-in-screenshots/check-in-proof-{datetime.strftime(datetime.now(), '%Y%m%d_%H%M')}.png"
         self.browser.save_screenshot(png_file_path)
-        # screenshot doesn't work on docker, only when running on bash
 
         print(print_log("O seu check-in para o próximo jogo do Coxa-doido foi feito com sucesso"))
         time.sleep(2)
@@ -57,6 +60,10 @@ class CoxaCheckIn:
 
 
     def login_socios_page(self) -> bool:
+        """
+            Function to login into the Coritiba socios' website.
+            It will use environment variables COXA_CPF and COXA_PASSWORD to login.
+        """
         cpf = self.get_user_cpf()
         __password = os.environ.get("COXA_PASSWORD")
         
@@ -90,22 +97,35 @@ class CoxaCheckIn:
 
 
     def select_stadium_sector(self):
+        """
+            Function to make the check-in on the stadium sector.
+            The options are arquibancada or maua.
+            It will use the environment variable COXA_SECTOR.
+        """
+        sector_to_sit = os.environ.get("COXA_SECTOR")
+
         if sector_to_sit == "arquibancada":
-            time.sleep(5)
             self.browser.find_element(By.XPATH, '/html/body/div[9]/div/div/div/div/div[2]/div[8]/div/div/div[2]/div/div/div[3]/div/div[2]').click()
             print(print_log("Realizado check-in na Arquibancada!"))
             time.sleep(5)
+
         elif sector_to_sit == "maua":
-            time.sleep(5)
             self.browser.find_element(By.XPATH, '/html/body/div[9]/div/div/div/div/div[2]/div[8]/div/div/div[2]/div/div/div[2]/div/div[2]').click()
             print(print_log("Realizado check-in na Mauá!"))
             time.sleep(5)
+
         else:
             self.browser.quit()
             raise ValueError("Opção de setor inválida, as opções são arquibancada ou maua")
 
 
     def select_check_in_type(self):
+        """
+            Function to select the check-in type.
+            The options are fisica or online.
+            It will use the environment variable CHECKIN_TYPE.
+        """
+        checkin_type = os.environ.get("CHECKIN_TYPE")
 
         if checkin_type == "fisica":
             target_element = self.browser.find_element(By.XPATH, '/html/body/div[10]/div[2]/div/div/div/div[2]')
@@ -128,6 +148,12 @@ class CoxaCheckIn:
 
     @staticmethod
     def send_email_notification(png_file_path: str):
+        """
+            Function to send the email with a screenshot with the proof that the check-in was successfull.
+            It is sent and received by the same email defined at the environment variable EMAIL.
+            The variable GMAIL_PASSWORD can be created at Google's app passwords.
+                -- https://myaccount.google.com/apppasswords
+        """
         msg = MIMEMultipart()   
         msg["From"] = os.environ.get("EMAIL")
         msg["To"] = os.environ.get("EMAIL")
