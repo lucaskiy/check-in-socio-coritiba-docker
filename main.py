@@ -6,11 +6,6 @@ from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 import time
 import os
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.image import MIMEImage
-import smtplib
-from dotenv import load_dotenv
 from utils.logger_print import print_log
 
 
@@ -51,6 +46,7 @@ class CoxaCheckIn:
         self.browser.save_screenshot(png_file_path)
 
         print(print_log("O seu check-in para o próximo jogo do Coxa-doido foi feito com sucesso"))
+        print(print_log("Você pode visualizar um screnshot como prova na pasta ./check-in-screenshots"))
         time.sleep(2)
         self.browser.quit()
         print(print_log("Browser fechado!"))
