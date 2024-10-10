@@ -53,13 +53,13 @@ class CoxaCheckIn:
             self.select_stadium_sector()
             self.select_check_in_type()
 
-            png_file_path = f"./check-in-screenshots/check-in-proof-{datetime.strftime(datetime.now(), '%Y%m%d_%H%M')}.png"
-            self.browser.save_screenshot(png_file_path)
-
             logging.info("O seu check-in para o próximo jogo do Coxa-doido foi feito com sucesso")
-            time.sleep(2)
             self.browser.quit()
             logging.info("Browser fechado!")
+
+            # comment the lines below if the email confirmation is not necessary
+            png_file_path = f"./check-in-screenshots/check-in-proof-{datetime.strftime(datetime.now(), '%Y%m%d_%H%M')}.png"
+            self.browser.save_screenshot(png_file_path)
 
             logging.info("Preparando envio de confirmação via e-mail")
             self.send_email_notification(png_file_path)
@@ -148,14 +148,14 @@ class CoxaCheckIn:
             self.browser.execute_script("arguments[0].scrollIntoView();", target_element) # the scroll is necessary because the button is hidden behind a pop-up
             self.browser.find_element(By.XPATH, '/html/body/div[10]/div[2]/div/div/div/div[2]').click()
             logging.info("Check-in feito para a carteirinha fisica!")
-            time.sleep(5)
+            time.sleep(1)
 
         elif checkin_type == "online":
             target_element = self.browser.find_element(By.XPATH, '/html/body/div[10]/div[2]/div/div/div/div[3]')
             self.browser.execute_script("arguments[0].scrollIntoView();", target_element) # the scroll is necessary because the button is hidden behind a pop-up
             self.browser.find_element(By.XPATH, '/html/body/div[10]/div[2]/div/div/div/div[3]').click()
             logging.info("Check-in feito para a carteirinha online!")
-            time.sleep(5)
+            time.sleep(1)
 
         else:
             self.browser.quit()
