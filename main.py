@@ -41,24 +41,7 @@ class CoxaCheckIn:
             checkin_type = os.environ.get("CHECKIN_TYPE")
 
             self.select_stadium_sector()
-
-            if checkin_type == "fisica":
-                target_element = self.browser.find_element(By.XPATH, '/html/body/div[10]/div[2]/div/div/div/div[2]')
-                self.browser.execute_script("arguments[0].scrollIntoView();", target_element)
-                self.browser.find_element(By.XPATH, '/html/body/div[10]/div[2]/div/div/div/div[2]').click()
-                print(print_log("Check-in feito para a carteirinha fisica!"))
-                time.sleep(5)
-
-            elif checkin_type == "online":
-                target_element = self.browser.find_element(By.XPATH, '/html/body/div[10]/div[2]/div/div/div/div[3]')
-                self.browser.execute_script("arguments[0].scrollIntoView();", target_element)
-                self.browser.find_element(By.XPATH, '/html/body/div[10]/div[2]/div/div/div/div[3]').click()
-                print(print_log("Check-in feito para a carteirinha online!"))
-                time.sleep(5)
-
-            else:
-                self.browser.quit()
-                raise ValueError("Opção de check-in inválida, as opções são fisica ou online")
+            self.select_check_in_type()
 
         png_file_path = f"./check-in-screenshots/check-in-proof-{datetime.strftime(datetime.now(), '%Y%m%d_%H%M')}.png"
         self.browser.save_screenshot(png_file_path)
@@ -93,6 +76,7 @@ class CoxaCheckIn:
         except Exception as e:
             raise e
 
+
     def get_user_cpf(self) -> str:
         cpf = os.environ.get("COXA_CPF")
         if cpf.isnumeric():
@@ -119,6 +103,28 @@ class CoxaCheckIn:
         else:
             self.browser.quit()
             raise ValueError("Opção de setor inválida, as opções são arquibancada ou maua")
+
+
+    def select_check_in_type(self):
+
+        if checkin_type == "fisica":
+            target_element = self.browser.find_element(By.XPATH, '/html/body/div[10]/div[2]/div/div/div/div[2]')
+            self.browser.execute_script("arguments[0].scrollIntoView();", target_element)
+            self.browser.find_element(By.XPATH, '/html/body/div[10]/div[2]/div/div/div/div[2]').click()
+            print(print_log("Check-in feito para a carteirinha fisica!"))
+            time.sleep(5)
+
+        elif checkin_type == "online":
+            target_element = self.browser.find_element(By.XPATH, '/html/body/div[10]/div[2]/div/div/div/div[3]')
+            self.browser.execute_script("arguments[0].scrollIntoView();", target_element)
+            self.browser.find_element(By.XPATH, '/html/body/div[10]/div[2]/div/div/div/div[3]').click()
+            print(print_log("Check-in feito para a carteirinha online!"))
+            time.sleep(5)
+
+        else:
+            self.browser.quit()
+            raise ValueError("Opção de check-in inválida, as opções são fisica ou online")
+
 
     @staticmethod
     def send_email_notification(png_file_path: str):
