@@ -33,7 +33,7 @@ ARG COXA_PASSWORD
 ARG COXA_SECTOR
 ARG EMAIL
 ARG GMAIL_PASSWORD
-ARG CHECKIN_TYPE
+ARG CHECKIN_TYPE 
 
 # install requirements.txt
 RUN pip install -r requirements.txt 
