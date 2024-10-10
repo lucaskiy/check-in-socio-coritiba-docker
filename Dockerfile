@@ -25,6 +25,10 @@ RUN wget -O /tmp/chromedriver.zip https://storage.googleapis.com/chrome-for-test
 # set display port to avoid crash
 ENV DISPLAY=:99
 
+# install selenium
+RUN pip install selenium==4.3.0
+
+
 ADD . /home/coxa_checkin/
 WORKDIR /home/coxa_checkin/
 

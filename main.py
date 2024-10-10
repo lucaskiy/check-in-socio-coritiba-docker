@@ -18,7 +18,6 @@ logging.basicConfig(
     datefmt='%Y-%m-%d %H:%M:%S'  
 )
 
-
 class CoxaCheckIn:
 
     def __init__(self) -> None:
@@ -56,6 +55,7 @@ class CoxaCheckIn:
             logging.info("O seu check-in para o próximo jogo do Coxa-doido foi feito com sucesso")
             self.browser.quit()
             logging.info("Browser fechado!")
+
 
             # comment the lines below if the email confirmation is not necessary
             png_file_path = f"./check-in-screenshots/check-in-proof-{datetime.strftime(datetime.now(), '%Y%m%d_%H%M')}.png"
