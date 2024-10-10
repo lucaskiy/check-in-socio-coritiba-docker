@@ -18,7 +18,9 @@ RUN curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - 
 # Install ChromeDriver version 129.0.6668.70
 RUN wget -O /tmp/chromedriver.zip https://storage.googleapis.com/chrome-for-testing-public/129.0.6668.70/linux64/chromedriver-linux64.zip && \
     unzip /tmp/chromedriver.zip -d /usr/local/bin/ && \
-    rm /tmp/chromedriver.zip
+    rm /tmp/chromedriver.zip && \
+    chmod +x /usr/local/bin/chromedriver-linux64/chromedriver && \
+    ln -s /usr/local/bin/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver
 
 # set display port to avoid crash
 ENV DISPLAY=:99
@@ -29,8 +31,9 @@ WORKDIR /home/coxa_checkin/
 ARG COXA_CPF
 ARG COXA_PASSWORD
 ARG COXA_SECTOR
-ARG COXA_EMAIL_SENDER
+ARG EMAIL
 ARG GMAIL_PASSWORD
+ARG CHECKIN_TYPE
 
 # install requirements.txt
 RUN pip install -r requirements.txt 

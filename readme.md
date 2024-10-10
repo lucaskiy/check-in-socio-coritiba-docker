@@ -35,3 +35,6 @@ exemplo: docker cp d0c3435cd99b:/home/coxa_checkin/check-in-screenshots/ /home/l
 
 Adicionei uma função para notificar por email que o check-in foi realizado com sucesso.
 Porém por algum motivo essa função só funciona quando o docker é rodado em bash.
+
+docker build -t coxa-checkin .
+docker run -e EMAIL=lucask.kiy@gmail.com -e COXA_CPF=12400342962 -e COXA_PASSWORD=extintor -e COXA_SECTOR=arquibancada -e CHECKIN_TYPE=fisica -e GMAIL_PASSWORD=spfxpnqvlubspbhi coxa-checkin
