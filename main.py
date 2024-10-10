@@ -187,7 +187,7 @@ class CoxaCheckIn:
             server.login(msg['From'], password)
             server.sendmail(msg['From'], msg['To'], msg.as_string())
             server.quit()
-            logging.info("Email de confirmação enviado com sucesso para {msg['To']}:")
+            logging.info(f"Email de confirmação enviado com sucesso para {msg['To']}:")
 
         except Exception as e:
             raise e
