@@ -72,6 +72,8 @@ class CoxaCheckIn:
         """
 
         cpf = os.environ.get("COXA_CPF")
+        current_url = self.browser.current_url
+
         if self.cpf_is_valid(cpf):
             __password = os.environ.get("COXA_PASSWORD")
             
@@ -84,9 +86,13 @@ class CoxaCheckIn:
                 time.sleep(2)
                 password_button.send_keys(__password)
                 password_button.send_keys(Keys.ENTER)
-                time.sleep(1)
+                time.sleep(5)
 
-                return True
+                if self.browser.current_url != current_url:
+                    return True
+                else:
+                    logging.error("Erro no login, verifique se o CPF e a senha estão corretos")
+                    return False
 
             except Exception as e:
                 raise e
