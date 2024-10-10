@@ -33,25 +33,46 @@ class CoxaCheckIn:
         login_success = self.login_socios_page()
         if login_success:
             print(print_log("Login realizado com sucesso, seguindo para o check-in"))
-            click on make check-in option
+            #click on make check-in option
             button = self.browser.find_element(By.XPATH, '//*[@id="conteudo_hotsite"]/div/div[2]/div[1]/div/div[6]')
             self.browser.execute_script("arguments[0].click();", button)
 
             sector_to_sit = os.environ.get("COXA_SECTOR")
+            checkin_type = os.environ.get("CHECKIN_TYPE")
 
-            if sector_to_sit == "1":
-                self.browser.find_element(By.XPATH, '//*[@id="corpo_checkin"]/div/div/div[2]/div/div[2]').click()
+            if sector_to_sit == "arquibancada":
+                time.sleep(5)
+                self.browser.find_element(By.XPATH, '/html/body/div[9]/div/div/div/div/div[2]/div[8]/div/div/div[2]/div/div/div[3]/div/div[2]').click()
                 print(print_log("Realizado check-in na Arquibancada!"))
                 time.sleep(5)
-            elif sector_to_sit == "2":
-                self.browser.find_element(By.XPATH, '//*[@id="corpo_checkin"]/div/div/div[3]/div/div[2]').click()
-                print(print_log("Realizado check-in na Arquibancada!"))
+            elif sector_to_sit == "maua":
+                time.sleep(5)
+                self.browser.find_element(By.XPATH, '/html/body/div[9]/div/div/div/div/div[2]/div[8]/div/div/div[2]/div/div/div[2]/div/div[2]').click()
+                print(print_log("Realizado check-in na Mauá!"))
                 time.sleep(5)
             else:
                 self.browser.quit()
-                raise ValueError("Opção de setor inválida, favor tentar novamente")
+                raise ValueError("Opção de setor inválida, as opções são arquibancada ou maua")
 
-        png_file_path = f"./check-in-screenshots/check-in-proof-{datetime.strftime(datetime.now(), '%Y-%m-%d')}.png"
+            if checkin_type == "fisica":
+                target_element = self.browser.find_element(By.XPATH, '/html/body/div[10]/div[2]/div/div/div/div[2]')
+                self.browser.execute_script("arguments[0].scrollIntoView();", target_element)
+                self.browser.find_element(By.XPATH, '/html/body/div[10]/div[2]/div/div/div/div[2]').click()
+                print(print_log("Check-in feito para a carteirinha fisica!"))
+                time.sleep(5)
+
+            elif checkin_type == "online":
+                target_element = self.browser.find_element(By.XPATH, '/html/body/div[10]/div[2]/div/div/div/div[3]')
+                self.browser.execute_script("arguments[0].scrollIntoView();", target_element)
+                self.browser.find_element(By.XPATH, '/html/body/div[10]/div[2]/div/div/div/div[3]').click()
+                print(print_log("Check-in feito para a carteirinha online!"))
+                time.sleep(5)
+
+            else:
+                self.browser.quit()
+                raise ValueError("Opção de check-in inválida, as opções são fisica ou online")
+
+        png_file_path = f"./check-in-screenshots/check-in-proof-{datetime.strftime(datetime.now(), '%Y%m%d_%H%M')}.png"
         self.browser.save_screenshot(png_file_path)
         # screenshot doesn't work on docker, only when running on bash
 
@@ -70,10 +91,11 @@ class CoxaCheckIn:
         
         try:
             # insert login credentials and enter 'sócios' account
-            login_button = self.browser.find_element(By.XPATH, '/html/body/div/main/div/div/div[2]/section/div/div[1]/input')
+            login_button = self.browser.find_element(By.XPATH, '/html/body/div/main/div/div/div[3]/section/div/div[1]/input')
             login_button.send_keys(cpf)
 
-            password_button = self.browser.find_element(By.XPATH, '/html/body/div/main/div/div/div[2]/section/div/div[2]/input')
+            password_button = self.browser.find_element(By.XPATH, '/html/body/div/main/div/div/div[3]/section/div/div[2]/input')
+            time.sleep(2)
             password_button.send_keys(__password)
             password_button.send_keys(Keys.ENTER)
             time.sleep(1)
@@ -97,8 +119,8 @@ class CoxaCheckIn:
     @staticmethod
     def send_email_notification(png_file_path: str):
         msg = MIMEMultipart()   
-        msg["From"] = "lucask.kiy@gmail.com"
-        msg["To"] = os.environ.get("COXA_EMAIL")
+        msg["From"] = os.environ.get("EMAIL")
+        msg["To"] = os.environ.get("EMAIL")
         msg["Subject"] = "Confirmação de check-in Coritiba"
         password = os.environ.get("GMAIL_PASSWORD")
 
@@ -113,7 +135,7 @@ class CoxaCheckIn:
             server.login(msg['From'], password)
             server.sendmail(msg['From'], msg['To'], msg.as_string())
             server.quit()
-            print(f"Email de confirmação enviado com sucesso para {msg['To']}:")
+            print(print_log(f"Email de confirmação enviado com sucesso para {msg['To']}:"))
 
         except Exception as e:
             raise e
