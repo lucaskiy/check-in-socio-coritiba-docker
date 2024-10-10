@@ -1,13 +1,22 @@
 #!/bin/bash
 
-# type your cpf, digits only
-export cpf=12345678900
+# Digite seu CPF de login da página de login do sócio (somente os dígitos)
+export COXA_CPF=
 
-# type your password
-export coxa_password=password
+# Digite sua senha da página de login do sócio
+export COXA_PASSWORD=
 
-# select which sector to sit, 1 for 'ARQUIBANCADA', 2 for 'MAUA'
-export stadium_sector=1
+# Escolha o setor de check-in, opções: arquibancada ou maua (tudo minúsculo)
+export COXA_SECTOR=
+
+# Escolha o tipo de check-in, opções: fisica ou online (tudo minúsculo)
+export CHECKIN_TYPE=
+
+# Caso opte pela notificão de email, coloque abaixo o email que irá receber a notificação
+export EMAIL=
+
+# Senha de APP do email
+export GMAIL_PASSWORD=
 
 
-docker run -ti --env cpf=$cpf --env password=$password --env stadium_sector=$stadium_sector coxa_check_in
+docker run -e EMAIL=$EMAIL -e COXA_CPF=$COXA_CPF -e COXA_PASSWORD=$COXA_PASSWORD -e COXA_SECTOR=$COXA_SECTOR -e CHECKIN_TYPE=$CHECKIN_TYPE -e GMAIL_PASSWORD=$GMAIL_PASSWORD coxa-checkin
