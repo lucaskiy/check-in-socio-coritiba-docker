@@ -40,7 +40,7 @@ class CoxaCheckIn:
             sector_to_sit = os.environ.get("COXA_SECTOR")
             checkin_type = os.environ.get("CHECKIN_TYPE")
 
-            self.select_sector()
+            self.select_stadium_sector()
 
             if checkin_type == "fisica":
                 target_element = self.browser.find_element(By.XPATH, '/html/body/div[10]/div[2]/div/div/div/div[2]')
@@ -105,7 +105,7 @@ class CoxaCheckIn:
         raise ValueError("Carácter inválido, por favor digite somente números")
 
 
-    def select_sector(self):
+    def select_stadium_sector(self):
         if sector_to_sit == "arquibancada":
             time.sleep(5)
             self.browser.find_element(By.XPATH, '/html/body/div[9]/div/div/div/div/div[2]/div[8]/div/div/div[2]/div/div/div[3]/div/div[2]').click()
