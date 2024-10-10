@@ -129,14 +129,14 @@ class CoxaCheckIn:
 
         if checkin_type == "fisica":
             target_element = self.browser.find_element(By.XPATH, '/html/body/div[10]/div[2]/div/div/div/div[2]')
-            self.browser.execute_script("arguments[0].scrollIntoView();", target_element)
+            self.browser.execute_script("arguments[0].scrollIntoView();", target_element) # the scroll is necessary because the button is hidden behind a pop-up
             self.browser.find_element(By.XPATH, '/html/body/div[10]/div[2]/div/div/div/div[2]').click()
             print(print_log("Check-in feito para a carteirinha fisica!"))
             time.sleep(5)
 
         elif checkin_type == "online":
             target_element = self.browser.find_element(By.XPATH, '/html/body/div[10]/div[2]/div/div/div/div[3]')
-            self.browser.execute_script("arguments[0].scrollIntoView();", target_element)
+            self.browser.execute_script("arguments[0].scrollIntoView();", target_element) # the scroll is necessary because the button is hidden behind a pop-up
             self.browser.find_element(By.XPATH, '/html/body/div[10]/div[2]/div/div/div/div[3]').click()
             print(print_log("Check-in feito para a carteirinha online!"))
             time.sleep(5)
