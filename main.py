@@ -40,19 +40,7 @@ class CoxaCheckIn:
             sector_to_sit = os.environ.get("COXA_SECTOR")
             checkin_type = os.environ.get("CHECKIN_TYPE")
 
-            if sector_to_sit == "arquibancada":
-                time.sleep(5)
-                self.browser.find_element(By.XPATH, '/html/body/div[9]/div/div/div/div/div[2]/div[8]/div/div/div[2]/div/div/div[3]/div/div[2]').click()
-                print(print_log("Realizado check-in na Arquibancada!"))
-                time.sleep(5)
-            elif sector_to_sit == "maua":
-                time.sleep(5)
-                self.browser.find_element(By.XPATH, '/html/body/div[9]/div/div/div/div/div[2]/div[8]/div/div/div[2]/div/div/div[2]/div/div[2]').click()
-                print(print_log("Realizado check-in na Mauá!"))
-                time.sleep(5)
-            else:
-                self.browser.quit()
-                raise ValueError("Opção de setor inválida, as opções são arquibancada ou maua")
+            self.select_sector()
 
             if checkin_type == "fisica":
                 target_element = self.browser.find_element(By.XPATH, '/html/body/div[10]/div[2]/div/div/div/div[2]')
@@ -115,6 +103,22 @@ class CoxaCheckIn:
             raise ValueError("Quantidade de dígitos do CPF inválido, por favor digite 11 números")
         self.browser.quit()
         raise ValueError("Carácter inválido, por favor digite somente números")
+
+
+    def select_sector(self):
+        if sector_to_sit == "arquibancada":
+            time.sleep(5)
+            self.browser.find_element(By.XPATH, '/html/body/div[9]/div/div/div/div/div[2]/div[8]/div/div/div[2]/div/div/div[3]/div/div[2]').click()
+            print(print_log("Realizado check-in na Arquibancada!"))
+            time.sleep(5)
+        elif sector_to_sit == "maua":
+            time.sleep(5)
+            self.browser.find_element(By.XPATH, '/html/body/div[9]/div/div/div/div/div[2]/div[8]/div/div/div[2]/div/div/div[2]/div/div[2]').click()
+            print(print_log("Realizado check-in na Mauá!"))
+            time.sleep(5)
+        else:
+            self.browser.quit()
+            raise ValueError("Opção de setor inválida, as opções são arquibancada ou maua")
 
     @staticmethod
     def send_email_notification(png_file_path: str):
