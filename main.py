@@ -53,16 +53,16 @@ class CoxaCheckIn:
             self.select_stadium_sector()
             self.select_check_in_type()
 
-        png_file_path = f"./check-in-screenshots/check-in-proof-{datetime.strftime(datetime.now(), '%Y%m%d_%H%M')}.png"
-        self.browser.save_screenshot(png_file_path)
+            png_file_path = f"./check-in-screenshots/check-in-proof-{datetime.strftime(datetime.now(), '%Y%m%d_%H%M')}.png"
+            self.browser.save_screenshot(png_file_path)
 
-        logging.info("O seu check-in para o próximo jogo do Coxa-doido foi feito com sucesso")
-        time.sleep(2)
-        self.browser.quit()
-        logging.info("Browser fechado!")
+            logging.info("O seu check-in para o próximo jogo do Coxa-doido foi feito com sucesso")
+            time.sleep(2)
+            self.browser.quit()
+            logging.info("Browser fechado!")
 
-        logging.info("Preparando envio de confirmação via e-mail")
-        self.send_email_notification(png_file_path)
+            logging.info("Preparando envio de confirmação via e-mail")
+            self.send_email_notification(png_file_path)
 
 
     def login_socios_page(self) -> bool:
