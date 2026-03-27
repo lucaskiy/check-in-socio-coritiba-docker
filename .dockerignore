@@ -1,0 +1,9 @@
+.venv/
+venv/
+__pycache__/
+utils/__pycache__/
+.git/
+checkin.sh
+check-in-screenshots/
+teste.py
+*.md
